@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-white to-red-500 flex flex-col justify-center items-center p-4">
-    <div class="m-8">
+    <!-- <div class="m-8">
       <img src="../../assets/images/Easyshop.PNG" alt="Easyshop Logo" class="w-36 h-36">
-    </div>
+    </div> -->
     <div class="bg-white rounded-t-3xl w-full max-w-md p-8 space-y-6">
       <h1 class="text-2xl font-bold text-center font-noto-sans-lao text-red-600">ສ້າງບັນຊີຂອງເຈົ້າ</h1>
 
