@@ -8,5 +8,9 @@ export default {
       password: password
     }
     return API().post(url, data)
+  },
+  signInWithGoogle() {
+    const url = '/auth/google'
+    return API().get(url)
   }
 }

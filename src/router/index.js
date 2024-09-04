@@ -9,7 +9,20 @@ import Order from '@/components/order/order.vue'
 import orderhistory from '@/components/order/order-history.vue'
 import Profile from '@/components/profile/profile.vue'
 import Popular_product from '@/components/product/popular_product.vue'
+import Welcome from '@/views/login/welcome.vue'
+import register from '@/views/login/sign-up.vue'
+
 const routes = [
+  {
+    path: '/',
+    name: 'welcome',
+    component: Welcome
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: register
+  },
   {
     path: '/login',
     name: 'Login',
@@ -41,17 +54,17 @@ const routes = [
     component: cardList
   },
   {
-    path:'/order',
+    path: '/order',
     name: 'order',
     component: Order
   },
   {
     path: '/history',
     name: 'order-history',
-    component:orderhistory
+    component: orderhistory
   },
   {
-    path:'/profile',
+    path: '/profile',
     name: 'profile',
     component: Profile
   },
@@ -59,9 +72,7 @@ const routes = [
     path: '/popular',
     name: 'popular',
     component: Popular_product
-
   }
-
 ]
 
 const router = createRouter({

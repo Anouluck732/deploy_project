@@ -1,161 +1,118 @@
 <template>
-    <div class="min-h-screen bg-white flex flex-col">
-        <div class="fixed top-0 left-0 w-full bg-white z-10 flex items-center justify-between p-4">
-            <button class="text-2xl">
-                <ChevronLeft class="h-6 w-6 text-gray-600" />
+    <div class="min-h-screen bg-gradient-to-br from-red-500 to-white flex flex-col justify-center items-center p-6">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-8 space-y-6">
+        <h1 class="text-2xl font-semibold font-noto-sans-lao text-center text-red-600">ເຂົ້າສູ່ລະບົບ</h1>
+  
+        <form @submit.prevent="sendLogin" class="space-y-4">
+          <div class="relative">
+            <input type="email" v-model="loginData.username" placeholder="ອີເມວ"
+              class="w-full font-noto-sans-lao p-3 border border-red-300 rounded-lg focus:border-red-500 focus:outline-none pl-10">
+            <MailIcon class="absolute left-3 top-3 h-5 w-5 text-gray-500" />
+          </div>
+  
+          <div class="relative">
+            <input :type="showPassword ? 'text' : 'password'" v-model="loginData.password" placeholder="ລະຫັດຜ່ານ"
+              class="w-full p-3 border font-noto-sans-lao border-red-300 rounded-lg focus:border-red-500 focus:outline-none pl-10 pr-12">
+            <LockIcon class="absolute left-3 top-3 h-5 w-5 text-gray-500" />
+            <button type="button" @click="togglePassword" class="absolute right-3 top-3">
+              <EyeIcon v-if="!showPassword" class="h-5 w-5 text-gray-500" />
+              <EyeOffIcon v-else class="h-5 w-5 text-gray-500" />
             </button>
-            <h1 class="text-header">로그인</h1>
-            <div class=""></div> <!-- Spacer to balance the layout -->
+          </div>
+  
+          <button type="submit"
+            :disabled="isButtonDisabled"
+            class="w-full font-noto-sans-lao py-3 font-semibold bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+           ເຂົ້າສູ່ລະບົບ
+          </button>
+        </form>
+  
+        <div class="text-center">
+          <p class="text-sm font-noto-sans-lao text-gray-600 mb-4">ສະໝັກຜ່ານມິເດຍ</p>
+          <div class="flex justify-center space-x-4">
+            <button class="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/2048px-2023_Facebook_icon.svg.png"
+                alt="Facebook" class="w-6 h-6" />
+            </button>
+            <button @click="signGoogle"
+              class="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200">
+              <img src="https://w7.pngwing.com/pngs/63/1016/png-transparent-google-logo-google-logo-g-suite-chrome-text-logo-chrome.png"
+                alt="Google" class="w-6 h-6" />
+            </button>
+            <button class="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200">
+              <img src="https://cdn-icons-png.flaticon.com/512/0/747.png" alt="Apple" class="w-6 h-6" />
+            </button>
+          </div>
         </div>
-        <hr class="mt-16" />
-
-        <div class="flex-grow flex flex-col items-center justify-center p-4">
-            <img src="@/assets/images/blue-arena.png" alt="Blue Arena Park Logo" class="w-32 mb-6" />
-            <p class="text-header">
-                사차 구매고객 맞춤형 원스톱 서비스
-            </p>
-            <p class="text-header">
-                품을 아레나 파크에서 오신 것을 환영합니다.
-            </p>
-
-            <div class="w-full max-w-sm mb-6">
-                <div class="flex border-b border-gray-200">
-                    <button @click.prevent="activeTab = 'carMaster'"
-                        :class="['flex-1 py-2 text-center', activeTab === 'carMaster' ? 'text-[#002C5F] border-b-4 border-[#002C5F] font-hyundai font-medium' : 'text-gray-500']">
-                        카마스터 회원
-                    </button>
-                    <button @click.prevent="activeTab = 'individual'"
-                        :class="['flex-1 py-2 text-center', activeTab === 'individual' ? 'text-[#002C5F] border-b-4 border-[#002C5F] font-hyundai font-medium' : 'text-gray-500']">
-                        개인회원
-                    </button>
-                </div>
-            </div>
-
-            <form @submit.prevent="sendLogin" class="w-full max-w-sm">
-                <div class="mb-4">
-                    <label for="username" class="text-title">아이디</label>
-                    <input v-model="loginData.username" type="text" id="username" placeholder="아이디를 입력해주세요."
-                        class="w-full p-2 border border-gray-300 rounded" />
-                </div>
-
-                <div class="mb-6 relative">
-                    <label for="password" class="text-title">비밀번호</label>
-                    <input v-model="loginData.password" :type="showPassword ? 'text' : 'password'" id="password"
-                        placeholder="비밀번호를 입력해주세요." class="input-text" />
-                    <button type="button" @click.prevent="togglePassword"
-                        class="absolute inset-y-0 right-0 top-6 pr-3 flex items-center">
-                        <Eye v-if="!showPassword" class="h-5 w-5 text-gray-400" />
-                        <EyeOff v-else class="h-5 w-5 text-gray-400" />
-                    </button>
-                </div>
-                <div v-if="loginError" class="text-red-500 text-sm mb-4">
-                    잘못된 사용자 이름 또는 비밀번호
-                </div>
-                <div class="flex items-center mb-6">
-                    <input type="checkbox" id="stayLoggedIn" v-model="stayLoggedIn" class="custom-checkbox">
-                    <label for="stayLoggedIn" class="ml-2 block text-sm text-gray-900">
-                        자동 로그인
-                    </label>
-                </div>
-
-                <div class="flex justify-between text-sm text-gray-600 mb-6">
-                    <div>
-                        <label @click="router.push('/find-id')" class="text-title">아이디 찾기 <span>|</span> </label>
-                        <label @click="router.push('/find-password')" class="text-title">비밀번호 찾기</label>
-                    </div>
-
-                    <label @click="router.push('/register/register-type')"
-                        class="text-title cursor-pointer">회원가입</label>
-                </div>
-
-                <button type="submit" :class="[
-                    'w-full py-2 rounded',
-                    isButtonDisabled ? 'bg-[#DDDDDD] text-black cursor-not-allowed' : 'btn-login'
-                ]" :disabled="isButtonDisabled">
-                    로그인
-                </button>
-            </form>
-        </div>
+  
+        <p class="text-sm font-noto-sans-lao text-center">
+          ບັນຊີມີແລ້ວບໍ? 
+          <a href="#" @click.prevent="goToLogin" class="text-red-600 font-noto-sans-lao hover:underline">ລົງທະບຽນ</a>
+        </p>
+      </div>
     </div>
-    <modal :show="showModal" @close="onClose" :title="modalTitle" />
-</template>
-
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import { ChevronLeft, Eye, EyeOff } from 'lucide-vue-next'
-import { useRouter } from 'vue-router'
-
-import loginService from '@/services/login.service';
-const loginError = ref(false)
-const router = useRouter()
-const showPassword = ref(false)
-const activeTab = ref('individual')
-const showModal = ref(false)
-const modalTitle = ref('아이디, 비밀번호를 확인하세요.')
-
-const onClose = () => {
-    showModal.value = false
-}
-
-const loginData = ref({
+  </template>
+  
+  <script setup>
+  import { ref, computed } from 'vue';
+  import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from 'lucide-vue-next';
+  import { useRouter } from 'vue-router';
+  import loginService from '@/services/login.service';
+  
+  const router = useRouter();
+  const showPassword = ref(false);
+  const loginData = ref({
     username: '',
     password: ''
-})
-const stayLoggedIn = ref(false)
-
-const togglePassword = () => {
-    showPassword.value = !showPassword.value
-}
-
-onMounted(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedPassword = localStorage.getItem('password');
-
-    if (storedUsername && storedPassword) {
-        loginData.value.username = storedUsername;
-        loginData.value.password = storedPassword;
-        stayLoggedIn.value = true;
-    }
-});
-
-const sendLogin = async () => {
+  });
+  const stayLoggedIn = ref(false);
+  
+  const togglePassword = () => {
+    showPassword.value = !showPassword.value;
+  };
+  
+  const sendLogin = async () => {
     try {
-        const response = await loginService.login(loginData.value.username, loginData.value.password);
-        const data = response.data; // Extract the response data
-
-        if (response.status === 200 && data.token) { // Check for success and token presence
-            loginError.value = false;
-
-            // Store the token in localStorage
-            localStorage.setItem('token', data.token);
-
-            // Optionally, store user details if needed
-            localStorage.setItem('user', JSON.stringify(data.user));
-
-            if (stayLoggedIn.value) {
-                localStorage.setItem('username', loginData.value.username);
-                localStorage.setItem('password', loginData.value.password);
-            } else {
-                localStorage.removeItem('username');
-                localStorage.removeItem('password');
-            }
-
-            router.push('/main');
+      const response = await loginService.login(loginData.value.username, loginData.value.password);
+      const data = response.data;
+  
+      if (response.status === 200 && data.token) {
+        // Store the token in localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+  
+        if (stayLoggedIn.value) {
+          localStorage.setItem('username', loginData.value.username);
+          localStorage.setItem('password', loginData.value.password);
         } else {
-            loginError.value = true;  // Show error message
-            showModal.value = true;
+          localStorage.removeItem('username');
+          localStorage.removeItem('password');
         }
+  
+        router.push('/main');
+      } else {
+        console.error('Login failed: ', response.statusText);
+      }
     } catch (error) {
-        console.error('Login failed:', error);
-        loginError.value = true;
-        showModal.value = true;
+      console.error('Login failed:', error);
     }
-};
-
-
-
-const isButtonDisabled = computed(() => {
-    return loginData.value.username.trim() === '' || loginData.value.password.trim() === ''
-})
-
-</script>
+  };
+  
+  const isButtonDisabled = computed(() => {
+    return loginData.value.username.trim() === '' || loginData.value.password.trim() === '';
+  });
+  
+  const signGoogle = async () => {
+    try {
+      const response = await loginService.signInWithGoogle();
+      console.log(response);
+    } catch (error) {
+      console.error('Failed to sign in with Google:', error);
+    }
+  };
+  
+  const goToLogin = () => {
+    router.push('/register');
+  };
+  </script>
+  

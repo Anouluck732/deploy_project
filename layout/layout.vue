@@ -53,8 +53,8 @@ const navItems = ref([
   { icon: User, label: 'Profile', route: '/profile' }
 ]);
 
-const showHeader = computed(() => !['Login'].includes(route.name));
-const showNav = computed(() => !['Login'].includes(route.name));
+const showHeader = computed(() => !['Login','welcome','register'].includes(route.name));
+const showNav = computed(() => !['Login','welcome','register'].includes(route.name));
 
 const goBack = () => {
   router.back();
