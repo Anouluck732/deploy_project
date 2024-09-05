@@ -7,7 +7,7 @@
                   <path fill="none" d="M0 0h24v24H0z"/>
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
               </svg>
-              <p class="text-gray-600 mt-4">Loading...</p>
+              <p class="text-gray-600 font-noto-sans-lao mt-4">ກຳລັງໂຫຼດຂໍ້ມູນ...</p>
           </div>
           <div v-else-if="!orders.length" class="p-6 text-center">
               <p class="font-noto-sans-lao text-gray-600">ບໍມີປະຫວັດການສັ່ງຊຶ້</p>

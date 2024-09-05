@@ -1,6 +1,17 @@
 <template>
   <div class="container mx-auto p-4 font-noto-sans-lao mb-12">
     <!-- Product Grid -->
+    <div v-if="loading" class="p-6 text-center">
+      <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+      </svg>
+      <p class="text-gray-600 font-noto-sans-lao mt-4">ກຳລັງໂຫຼດ...</p>
+    </div>
+    <div v-else-if="!products.length" class="p-6 text-center">
+      <p class="font-noto-sans-lao text-gray-600">ຍັງບໍມີລາຍການທີ່ມັກ</p>
+    </div>
     <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-4">
       <div v-for="product in filteredProducts" :key="product.pid"
         class="bg-white rounded-lg overflow-hidden shadow-md relative transition-all duration-300 hover:shadow-xl">

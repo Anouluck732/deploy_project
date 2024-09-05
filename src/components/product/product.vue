@@ -1,5 +1,6 @@
 <template>
   <div class="container mt-[0px] mx-auto mb-12  p-4">
+
     <!-- Search Input -->
     <div class="mb-4">
       <input v-model="searchQuery" @input="handleSearch" type="text" placeholder="Search by name"
@@ -18,7 +19,17 @@
         </div>
       </div>
     </nav>
-
+    <div v-if="loading" class="p-6 text-center">
+      <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+      </svg>
+      <p class="text-gray-600 font-noto-sans-lao mt-4">ກຳລັງໂຫລດ...</p>
+    </div>
+    <div v-else-if="!products.length" class="p-6 text-center">
+      <p class="font-noto-sans-lao text-gray-600">ບໍມີລາຍການສິນຄ້າ</p>
+    </div>
     <!-- Product Grid -->
     <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-4">
       <div v-for="product in products" :key="product.pid"
@@ -27,7 +38,8 @@
           @click="navigateToProductDetail(product.pid)">
         <button @click.stop="toggleFavorite(product)" class="absolute top-2 right-2 transition-colors duration-200"
           :class="product.isFavorite ? 'text-red-500' : 'text-gray-400'" aria-label="Toggle favorite">
-          <Heart class="h-6 w-6" :class="{ 'fill-current': product.isFavorite, 'stroke-current': !product.isFavorite }" />
+          <Heart class="h-6 w-6"
+            :class="{ 'fill-current': product.isFavorite, 'stroke-current': !product.isFavorite }" />
         </button>
 
         <div class="p-4" @click="navigateToProductDetail(product.pid)">
@@ -44,8 +56,8 @@
             <span class="text-lg font-noto-sans-lao font-bold">${{ product.price }}</span>
           </div>
           <button @click.stop="addToCart(product)"
-            class="bg-red-500 text-white font-semibold py-2 px-4 font-noto-sans-lao rounded-lg mt-2 w-full" :disabled="product.inCart"
-            :class="{ 'opacity-50 cursor-not-allowed': product.inCart }">
+            class="bg-red-500 text-white font-semibold py-2 px-4 font-noto-sans-lao rounded-lg mt-2 w-full"
+            :disabled="product.inCart" :class="{ 'opacity-50 cursor-not-allowed': product.inCart }">
             {{ product.inCart ? 'ຢູ່ໃນກະຕ່າແລ້ວ' : 'ເພີ່ມເຂົ້າກະຕ່າ' }}
           </button>
         </div>
@@ -64,11 +76,12 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const searchQuery = ref('')
-const selectedCategory = ref('ສິນຄ້າທັງໝົດ')
+const selectedCategory = ref('ສິນຄໍາທັງໝົດ')
 const products = ref([])
+const loading = ref(true)
 
 const categories = [
-  { name: 'ສິນຄ້າທັງໝົດ', icon: Star, ptid: null },
+  { name: 'ສິນຄໍາທັງໝົດ', icon: Star, ptid: null },
   { name: 'ເສື້ອ', icon: Shirt, ptid: 1 },
   { name: 'ເກີບ', icon: Binoculars, ptid: 2 },
   { name: 'ໂສ້ງ', icon: Package2Icon, ptid: 3 },
@@ -143,6 +156,8 @@ const toggleFavorite = async (product) => {
 };
 
 const fetchProducts = async () => {
+  loading.value = true; // Set loading to true at the start
+
   try {
     const user = JSON.parse(localStorage.getItem('user'));
     const user_id = user ? user.id : null;
@@ -174,6 +189,8 @@ const fetchProducts = async () => {
     console.log('Products fetched:', products.value);
   } catch (error) {
     console.error('Error fetching products, favorites, and cart items:', error);
+  } finally {
+    loading.value = false; // Set loading to false when done (success or error)
   }
 };
 
@@ -189,6 +206,7 @@ const selectCategory = (category) => {
 onMounted(fetchProducts);
 
 </script>
+
 
 <style scoped>
 .scrollbar-hide {
