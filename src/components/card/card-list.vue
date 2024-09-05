@@ -20,7 +20,7 @@
                         <div class="flex items-center">
                             <button @click="decreaseQuantity(item)" class="text-gray-500 px-2" :disabled="item.qty <= 1">-</button>
                             <span class="mx-2">{{ item.qty }}</span>
-                            <button @click="increaseQuantity(item)" class="text-gray-500 px-2">+</button>
+                            <button @click="increaseQuantity(item)" class="text-gray-500 px-2" :disabled="item.qty >= item.qty_product">+</button>
                         </div>
                         <div class="items-center">
                             <LucideTrash @click="removeItem(item)" class="w-5 h-6 text-red-500 cursor-pointer ml-6 mt-2"/>
@@ -48,21 +48,40 @@ import { ref, computed, onMounted } from 'vue'
 import apiCard from '@/services/card.service'
 import { LucideTrash } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
-import { useCartStore } from '@/stores/cart.store' // Import Pinia store
+import { useCartStore } from '@/stores/cart.store'
 
 const router = useRouter()
-const cartStore = useCartStore() // Use Pinia store for cart
+const cartStore = useCartStore()
 
 const cartItems = ref([])
 const loading = ref(true)
-const userId = ref('2') // Replace with actual user ID or authentication logic
+const userId = ref(null)
+
+const getUserFromLocalStorage = () => {
+    const userString = localStorage.getItem('user')
+    if (userString) {
+        const user = JSON.parse(userString)
+        userId.value = user.id
+    } else {
+        console.error('User not found in localStorage')
+        // Handle the case when user is not in localStorage (e.g., redirect to login)
+        router.push('/login')
+    }
+}
 
 const fetchCart = async () => {
+    if (!userId.value) {
+        console.error('User ID not available')
+        return
+    }
     try {
         loading.value = true
         const response = await apiCard.getCart(userId.value)
-        cartItems.value = response.data
-        cartStore.cartItems = response.data // Sync with Pinia store
+        cartItems.value = response.data.map(item => ({
+            ...item,
+            qty: 1 // Set initial quantity to 1 for each item
+        }))
+        cartStore.cartItems = cartItems.value // Sync with Pinia store
     } catch (error) {
         console.error('Error fetching cart:', error)
     } finally {
@@ -70,7 +89,6 @@ const fetchCart = async () => {
     }
 }
 
-// Compute total amount
 const totalAmount = computed(() => {
     return cartItems.value.reduce((total, item) => total + item.price * item.qty, 0).toFixed(2)
 })
@@ -80,12 +98,9 @@ const placeOrder = () => {
     router.push('/order')
 }
 
-// New methods for increasing and decreasing quantity
 const increaseQuantity = (item) => {
     if (item.qty < item.qty_product) {
         item.qty++
-    } else {
-        alert('Cannot exceed stock quantity.')
     }
 }
 
@@ -97,7 +112,7 @@ const decreaseQuantity = (item) => {
 
 const removeItem = async (item) => {
     try {
-        await apiCard.deleteCart(item.cart_id) // Assuming `item.id` is the `cid`
+        await apiCard.deleteCart(item.cart_id)
         const index = cartItems.value.indexOf(item)
         if (index !== -1) {
             cartItems.value.splice(index, 1)
@@ -107,6 +122,8 @@ const removeItem = async (item) => {
     }
 }
 
-onMounted(fetchCart)
+onMounted(() => {
+    getUserFromLocalStorage()
+    fetchCart()
+})
 </script>
-

@@ -11,6 +11,8 @@ import Profile from '@/components/profile/profile.vue'
 import Popular_product from '@/components/product/popular_product.vue'
 import Welcome from '@/views/login/welcome.vue'
 import register from '@/views/login/sign-up.vue'
+import CompleteOrder from '@/components/profile/complete-order.vue'
+import ChangePassword from '@/components/profile/change-password.vue'
 
 const routes = [
   {
@@ -72,7 +74,19 @@ const routes = [
     path: '/popular',
     name: 'popular',
     component: Popular_product
+  },
+  {
+    path: '/complete_order',
+    name: 'complete_order',
+    component: CompleteOrder
+
+  },
+  {
+    path: '/reset-password',
+    name: 'resetpassword',
+    component: ChangePassword // Ensure correct spelling for 'component'
   }
+  
 ]
 
 const router = createRouter({

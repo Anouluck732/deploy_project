@@ -4,4 +4,7 @@
 @tailwind utilities;
 
 @layer base {
+  .font-no-to-sans {
+    font-family: 'Noto Sans', sans-serif; /* Adjust this based on your actual font setup */
+  }
 }

@@ -1,41 +1,41 @@
 <template>
-    <div class="container mx-auto p-4">
-      <!-- Product Grid -->
-      <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-4">
-        <div v-for="product in filteredProducts" :key="product.pid"
-          class="bg-white rounded-lg overflow-hidden shadow-md relative transition-all duration-300 hover:shadow-xl">
-          <img :src="product.image || '/api/placeholder/300/200'" :alt="product.name" class="w-full h-48 object-cover" @click="navigateToProductDetail(product.pid)">
-          <button @click.stop="toggleFavorite(product)" 
-                  class="absolute top-2 right-2 transition-colors duration-200"
-                  :class="product.isFavorite ? 'text-red-500' : 'text-gray-400'"
-                  aria-label="Toggle favorite">
-            <Heart class="h-6 w-6" :class="{'fill-current': product.isFavorite, 'stroke-current': !product.isFavorite}" />
-          </button>
-  
-          <div class="p-4" @click="navigateToProductDetail(product.pid)">
-            <div class="flex items-center mb-2">
-              <div class="flex text-yellow-400">
-                <Star v-for="i in 5" :key="i" class="h-4 w-4"
-                  :class="i <= Math.floor(parseFloat(product.rating)) ? 'fill-current' : 'stroke-current'" />
-              </div>
-              <span class="ml-1 text-sm text-gray-600">{{ product.rating }}</span>
+  <div class="container mx-auto p-4 font-noto-sans-lao mb-12">
+    <!-- Product Grid -->
+    <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-4">
+      <div v-for="product in filteredProducts" :key="product.pid"
+        class="bg-white rounded-lg overflow-hidden shadow-md relative transition-all duration-300 hover:shadow-xl">
+        <img :src="product.image || '/api/placeholder/300/200'" :alt="product.name" class="w-full h-48 object-cover" @click="navigateToProductDetail(product.pid)">
+        <button @click.stop="toggleFavorite(product)" 
+                class="absolute top-2 right-2 transition-colors duration-200"
+                :class="product.isFavorite ? 'text-red-500' : 'text-gray-400'"
+                aria-label="Toggle favorite">
+          <Heart class="h-6 w-6" :class="{'fill-current': product.isFavorite, 'stroke-current': !product.isFavorite}" />
+        </button>
+
+        <div class="p-4" @click="navigateToProductDetail(product.pid)">
+          <div class="flex items-center mb-2">
+            <div class="flex text-yellow-400">
+              <Star v-for="i in 5" :key="i" class="h-4 w-4"
+                :class="i <= Math.floor(parseFloat(product.rating)) ? 'fill-current' : 'stroke-current'" />
             </div>
-            <p class="text-gray-600 text-sm mb-1 line-clamp-2">{{ product.description }}</p>
-            <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
-            <div class="flex justify-between items-baseline">
-              <span class="text-lg font-bold">${{ product.price }}</span>
-            </div>
-            <button @click.stop="addToCart(product)" 
-                    class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full"
-                    :disabled="product.inCart"
-                    :class="{ 'opacity-50 cursor-not-allowed': product.inCart }">
-              {{ product.inCart ? 'In Cart' : 'Add to Cart' }}
-            </button>
+            <span class="ml-1 text-sm text-gray-600">{{ product.rating }}</span>
           </div>
+          <p class="text-gray-600 text-sm mb-1 line-clamp-2">{{ product.description }}</p>
+          <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+          <div class="flex justify-between items-baseline">
+            <span class="text-lg font-bold">${{ product.price }}</span>
+          </div>
+          <button @click.stop="addToCart(product)" 
+                  class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full"
+                  :disabled="product.inCart"
+                  :class="{ 'opacity-50 cursor-not-allowed': product.inCart }">
+            {{ product.inCart ? 'In Cart' : 'Add to Cart' }}
+          </button>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script setup>
   import { ref, computed, onMounted } from 'vue';

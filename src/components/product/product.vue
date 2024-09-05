@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mt-[0px] mx-auto mb-12  p-4">
     <!-- Search Input -->
     <div class="mb-4">
       <input v-model="searchQuery" @input="handleSearch" type="text" placeholder="Search by name"
@@ -10,7 +10,7 @@
       <div class="overflow-x-auto scrollbar-hide">
         <div class="flex space-x-2 pb-2">
           <button v-for="category in categories" :key="category.name" @click="selectCategory(category)"
-            class="flex flex-col items-center justify-center rounded-lg p-3 min-w-[80px] transition-all duration-200 transform hover:scale-105"
+            class="flex flex-col font-noto-sans-lao items-center justify-center rounded-lg p-3 min-w-[80px] transition-all duration-200 transform hover:scale-105"
             :class="selectedCategory === category.name ? 'bg-red-500 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'">
             <component :is="category.icon" class="h-6 w-6 mb-1" />
             <span class="text-xs font-medium text-center">{{ category.name }}</span>
@@ -38,15 +38,15 @@
             </div>
             <span class="ml-1 text-sm text-gray-600">{{ product.rating }}</span>
           </div>
-          <p class="text-gray-600 text-sm mb-1 line-clamp-2">{{ product.description }}</p>
-          <h3 class="font-semibold text-lg mb-2">{{ product.name }}</h3>
+          <p class="text-gray-600 font-noto-sans-lao  text-sm mb-1 line-clamp-2">{{ product.description }}</p>
+          <h3 class="font-semibold font-noto-sans-lao text-lg mb-2">{{ product.name }}</h3>
           <div class="flex justify-between items-baseline">
-            <span class="text-lg font-bold">${{ product.price }}</span>
+            <span class="text-lg font-noto-sans-lao font-bold">${{ product.price }}</span>
           </div>
           <button @click.stop="addToCart(product)"
-            class="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg mt-2 w-full" :disabled="product.inCart"
+            class="bg-red-500 text-white font-semibold py-2 px-4 font-noto-sans-lao rounded-lg mt-2 w-full" :disabled="product.inCart"
             :class="{ 'opacity-50 cursor-not-allowed': product.inCart }">
-            {{ product.inCart ? 'In Cart' : 'Add to Cart' }}
+            {{ product.inCart ? 'ຢູ່ໃນກະຕ່າແລ້ວ' : 'ເພີ່ມເຂົ້າກະຕ່າ' }}
           </button>
         </div>
       </div>
@@ -64,16 +64,16 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const searchQuery = ref('')
-const selectedCategory = ref('All')
+const selectedCategory = ref('ສິນຄ້າທັງໝົດ')
 const products = ref([])
 
 const categories = [
-  { name: 'All', icon: Star, ptid: null },
-  { name: 'Shirt', icon: Shirt, ptid: 1 },
-  { name: 'Shoes', icon: Binoculars, ptid: 2 },
-  { name: 'Trousers', icon: Package2Icon, ptid: 3 },
-  { name: 'Watch', icon: WatchIcon, ptid: 4 },
-  { name: 'Accessories', icon: ShoppingBag, ptid: 5 }
+  { name: 'ສິນຄ້າທັງໝົດ', icon: Star, ptid: null },
+  { name: 'ເສື້ອ', icon: Shirt, ptid: 1 },
+  { name: 'ເກີບ', icon: Binoculars, ptid: 2 },
+  { name: 'ໂສ້ງ', icon: Package2Icon, ptid: 3 },
+  { name: 'ໂມງ', icon: WatchIcon, ptid: 4 },
+  { name: 'ເຄື່ອງປະດັບ', icon: ShoppingBag, ptid: 5 }
 ]
 
 const navigateToProductDetail = (pid) => {

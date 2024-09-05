@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <header v-if="showHeader"
-      class="fixed top-0 left-0 w-full bg-red-600 z-10 flex items-center justify-between p-4 shadow-md">
+      class="top-0 left-0 w-full bg-red-600 z-10 flex items-center justify-between p-4 shadow-md pt-5">
       <button class="text-2xl text-white" aria-label="Go back" @click="goBack">
         <ArrowLeft />
       </button>
@@ -16,16 +16,17 @@
       </div>
     </header>
 
-    <main :class="{ 'mt-16 mb-20': showHeader, 'my-0': !showHeader }" class="flex-grow overflow-y-auto">
-      <slot></slot>
-    </main>
+    <main class="flex-grow overflow-y-auto">
+  <slot></slot>
+</main>
 
-    <nav v-if="showNav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+
+    <nav v-if="showNav" class="fixed bottom-0 w-full left-0 right-0 bg-white border-t border-gray-200">
       <div class="flex justify-around items-center h-16">
         <router-link v-for="(item, index) in navItems" :key="index" :to="item.route" custom
           v-slot="{ navigate, isActive }">
           <a @click="navigate" @keypress.enter="navigate" role="link"
-            class="flex flex-col items-center w-full flex-shrink-0 mx-2"
+            class="flex flex-col font-noto-sans-lao items-center w-full flex-shrink-0 mx-2"
             :class="[isActive ? 'text-red-500' : 'text-gray-600 hover:text-red-500']" tabindex="0">
             <component :is="item.icon" class="w-6 h-6" />
             <span class="text-xs mt-1 whitespace-nowrap">{{ item.label }}</span>
@@ -39,18 +40,18 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { Home, ShoppingCart, Heart, User, ArrowLeft, ShoppingCartIcon, Search } from 'lucide-vue-next';
+import { Home, ShoppingCart, Heart, Settings, ArrowLeft, ShoppingCartIcon, Flame } from 'lucide-vue-next';
 import cartService from '@/services/card.service'; // Corrected to 'cartService'
 
 const router = useRouter();
 const route = useRoute();
 
 const navItems = ref([
-  { icon: Home, label: 'Home', route: '/product' },
-  { icon: Search, label: 'Search', route: '/popular' },
-  { icon: Heart, label: 'Favorites', route: '/favourite' },
-  { icon: ShoppingCart, label: 'History', route: '/history' },
-  { icon: User, label: 'Profile', route: '/profile' }
+  { icon: Home, label: 'ໜ້າຫຼັກ', route: '/product' },
+  { icon: Flame, label: 'ສິນຄ້າທີ່ນິຍົມ', route: '/popular' },
+  { icon: Heart, label: 'ສິນຄ້າທີ່ມັກ', route: '/favourite' },
+  { icon: ShoppingCart, label: 'ປະຫວັດການຊື້', route: '/history' },
+  { icon: Settings, label: 'ຕັ້ງຄ່າ', route: '/profile' }
 ]);
 
 const showHeader = computed(() => !['Login','welcome','register'].includes(route.name));
@@ -78,10 +79,6 @@ const updateCartTotal = async () => {
     console.error('Error fetching cart total:', error);
   }
 };
-
-
-
-
 onMounted(updateCartTotal);
 
 watch(() => route.path, updateCartTotal);

@@ -30,7 +30,8 @@
         </div>
 
         <div class="relative">
-          <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" placeholder="ຢືນຢັນລະຫັດຜ່ານ"
+          <input v-model="confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
+            placeholder="ຢືນຢັນລະຫັດຜ່ານ"
             class="w-full font-noto-sans-lao p-3 border border-red-300 rounded-lg focus:border-red-500 focus:outline-none pl-10 pr-12">
           <LockIcon class="absolute left-3 top-3 h-5 w-5 text-gray-500" />
           <button type="button" @click="toggleConfirmPassword" class="absolute right-3 top-3">
@@ -85,9 +86,23 @@ const confirmPassword = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
-const handleSignUp = () => {
-  // Implement sign up logic here
-  console.log('Sign up clicked', { fullName: fullName.value, email: email.value, password: password.value, confirmPassword: confirmPassword.value })
+const handleSignUp = async () => {
+  try {
+    const body = {
+      fullname: fullName.value,
+      email: email.value,
+      password: password.value,
+    }
+    if (password.value !== confirmPassword.value) {
+      alert('password not match')
+      return;
+    }
+    const reponse = await loginService.register(body)
+    console.log(reponse)
+    router.push('/login')
+  } catch (error) {
+    console.error('Failed to sign up:', error);
+  }
 }
 
 const signGoogle = async () => {
@@ -108,6 +123,6 @@ const toggleConfirmPassword = () => {
 }
 
 const goToLogin = () => {
- router.push('/login')
+  router.push('/login')
 }
 </script>
