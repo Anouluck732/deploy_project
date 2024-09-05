@@ -50,7 +50,7 @@ const navItems = ref([
   { icon: Home, label: 'ໜ້າຫຼັກ', route: '/product' },
   { icon: Flame, label: 'ສິນຄ້າທີ່ນິຍົມ', route: '/popular' },
   { icon: Heart, label: 'ສິນຄ້າທີ່ມັກ', route: '/favourite' },
-  { icon: ShoppingCart, label: 'ປະຫວັດການຊື້', route: '/history' },
+  { icon: ShoppingCart, label: 'ການສັ່ງຊື້', route: '/history' },
   { icon: Settings, label: 'ຕັ້ງຄ່າ', route: '/profile' }
 ]);
 
