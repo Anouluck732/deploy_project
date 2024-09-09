@@ -41,7 +41,7 @@
         </div>
 
         <button type="submit"
-          class="w-full py-2 px-4 font-noto-sans-lao bg-red-600 rounded-full text-white hover:bg-red-700 transition duration-200">
+          class="w-full py-2 px-4 font-noto-sans-lao bg-red-600 rounded-lg text-white hover:bg-red-700 transition duration-200">
           ລົງທະບຽນ
         </button>
       </form>

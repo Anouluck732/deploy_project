@@ -78,15 +78,13 @@ const routes = [
   {
     path: '/complete_order',
     name: 'complete_order',
-    component: CompleteOrder
-
+    component: CompleteOrder 
   },
   {
     path: '/reset-password',
     name: 'resetpassword',
-    component: ChangePassword // Ensure correct spelling for 'component'
+    component: ChangePassword
   }
-  
 ]
 
 const router = createRouter({
@@ -94,16 +92,17 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   const token = localStorage.getItem('token')
-
-//   if (to.meta.requiresAuth && !token) {
-//     next({ name: 'Login' })
-//   } else if (to.name === 'Login' && token) {
-//     next({ name: 'product' })
-//   } else {
-//     next()
-//   }
-// })
+// Add a global navigation guard
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token') // Assuming the token is stored with the key 'token'
+  
+  if (!token && to.name !== 'welcome' && to.name !== 'register' && to.name !== 'Login') {
+    // Redirect to welcome page if there's no token and the user is not already going to welcome, register, or login pages
+    next({ name: 'welcome' })
+  } else {
+    // Proceed as normal
+    next()
+  }
+})
 
 export default router

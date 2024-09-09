@@ -115,7 +115,7 @@ const addToCart = async (product) => {
     const body = {
       user_id: user.id,
       pid: product.pid,
-      quantity: 1
+      qty: 1
     };
 
     const response = await card.createCart(body);
@@ -133,7 +133,7 @@ const toggleFavorite = async (product) => {
 
     if (newFavoriteStatus) {
       const body = {
-        f_pid: product.pid,
+        fid: product.pid,
         user_id
       };
       const response = await favouriteService.createFavourite(body);
