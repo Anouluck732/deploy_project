@@ -73,33 +73,31 @@ const togglePassword = () => {
 
 const sendLogin = async () => {
   try {
-    const { username, password } = loginData.value;
-    const { data, status } = await loginService.login(username, password);
+    const response = await loginService.login(loginData.value.username, loginData.value.password);
+    const data = response.data;
 
-    console.log('Login response:', data); // Keep this for debugging
-
-    if (status === 200 && data?.message === 'Login successful' && data?.user) {
-      // Store user information
+    if (response.status === 200 && data.token && data.refreshToken) {
+      // Store the tokens in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
 
       if (stayLoggedIn.value) {
-        localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
+        localStorage.setItem('username', loginData.value.username);
+        localStorage.setItem('password', loginData.value.password);
       } else {
         localStorage.removeItem('username');
         localStorage.removeItem('password');
       }
+
       router.push('/product');
     } else {
-      throw new Error('Invalid response from server');
+      console.error('Login failed: ', response.statusText);
     }
   } catch (error) {
-    console.error('Login failed:', error.message);
-    // Optionally display an error message in the UI
-    document.querySelector('.text-red-500.text-sm.mb-4').textContent = 'Login failed. Please check your credentials and try again.';
+    console.error('Login failed:', error);
   }
 };
-
 
 const isButtonDisabled = computed(() => {
   return loginData.value.username.trim() === '' || loginData.value.password.trim() === '';

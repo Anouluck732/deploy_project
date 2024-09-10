@@ -19,7 +19,7 @@
           <div v-for="product in orderDetails.products" :key="product.pid" class="flex items-center mb-2">
             <img :src="product.image" alt="Product Image" class="w-16 h-16 object-cover mr-4" />
             <div>
-              <p class="text-sm font-medium">{{ product.name }}</p>
+              <p class="text-sm font-noto-sans-lao font-medium">{{ product.name }}</p>
               <p class="text-xs font-noto-sans-lao text-gray-600">ຈຳນວນ: {{ product.qty }}</p>
               <p class="text-xs font-noto-sans-lao text-gray-600">ລາຄາ: ${{ product.price }}</p>
             </div>
@@ -46,17 +46,14 @@ import { useCartStore } from '@/stores/cart.store';
 import apiOrder from '@/services/order.service';
 import { useRouter } from 'vue-router';
 
-// Setup router and cart store
 const router = useRouter();
 const cartStore = useCartStore();
 
-// Reactive state
 const formData = ref({
   shippingAddress: ''
 });
 const isSubmitting = ref(false);
 
-// Retrieve userId from localStorage
 const user = JSON.parse(localStorage.getItem('user'));
 const userId = user ? user.id : null;
 
@@ -68,20 +65,20 @@ const totalItems = computed(() => {
   return orderDetails.value.products.reduce((sum, product) => sum + (product.qty || 0), 0);
 });
 
-const totalAmount = computed(() => cartStore.totalAmount);
+const totalAmount = computed(() => {
+  return orderDetails.value.products.reduce((sum, product) => sum + (product.qty * product.price), 0);
+});
 
-// Handle form submission
 const handleSubmit = async () => {
-  isSubmitting.value = true;
-
   if (!userId) {
     alert('User is not authenticated. Please log in.');
-    isSubmitting.value = false;
     return;
   }
 
+  isSubmitting.value = true;
+
   const orderData = {
-    userId: userId, // Ensure this matches the expected format
+    userId: userId,
     order_date: new Date().toISOString(),
     total_price: totalAmount.value,
     order_status: 'pending',
@@ -99,6 +96,7 @@ const handleSubmit = async () => {
     cartStore.clearCart();
     router.push('/product');
   } catch (error) {
+    console.error('Error placing order:', error);
     alert('Error placing order. Please try again.');
   } finally {
     isSubmitting.value = false;
