@@ -132,12 +132,13 @@ const toggleFavorite = async (product) => {
     const newFavoriteStatus = !product.isFavorite;
 
     if (newFavoriteStatus) {
+      // Adjust the body to match the required format
       const body = {
-        fid: product.pid,
-        user_id
+        user_id, // Include user_id
+        pid: product.pid // Use pid instead of fid
       };
       const response = await favouriteService.createFavourite(body);
-      product.fid = response.data.fid;
+      product.fid = response.data.fid; // Assuming response includes fid
     } else {
       if (product.fid) {
         await favouriteService.deleteFavourite(product.fid);
@@ -154,6 +155,7 @@ const toggleFavorite = async (product) => {
     console.error('Error updating favorite status:', error);
   }
 };
+
 
 const fetchProducts = async () => {
   loading.value = true; // Set loading to true at the start
