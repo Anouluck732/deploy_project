@@ -93,16 +93,16 @@ const router = createRouter({
 })
 
 // Add a global navigation guard
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token') // Assuming the token is stored with the key 'token'
+// router.beforeEach((to, from, next) => {
+//   const token = localStorage.getItem('token') // Assuming the token is stored with the key 'token'
   
-  if (!token && to.name !== 'welcome' && to.name !== 'register' && to.name !== 'Login') {
-    // Redirect to welcome page if there's no token and the user is not already going to welcome, register, or login pages
-    next({ name: 'welcome' })
-  } else {
-    // Proceed as normal
-    next()
-  }
-})
+//   if (!token && to.name !== 'welcome' && to.name !== 'register' && to.name !== 'Login') {
+//     // Redirect to welcome page if there's no token and the user is not already going to welcome, register, or login pages
+//     next({ name: 'welcome' })
+//   } else {
+//     // Proceed as normal
+//     next()
+//   }
+// })
 
 export default router

@@ -78,7 +78,7 @@ const sendLogin = async () => {
 
     console.log('Login response:', data); // Keep this for debugging
 
-    if (status === 200 && data.message === 'Login successful' && data.user) {
+    if (status === 200 && data?.message === 'Login successful' && data?.user) {
       // Store user information
       localStorage.setItem('user', JSON.stringify(data.user));
 
@@ -89,29 +89,30 @@ const sendLogin = async () => {
         localStorage.removeItem('username');
         localStorage.removeItem('password');
       }
-
       router.push('/product');
     } else {
       throw new Error('Invalid response from server');
     }
   } catch (error) {
     console.error('Login failed:', error.message);
-    // Here you might want to set an error state or display a message to the user
+    // Optionally display an error message in the UI
+    document.querySelector('.text-red-500.text-sm.mb-4').textContent = 'Login failed. Please check your credentials and try again.';
   }
 };
+
 
 const isButtonDisabled = computed(() => {
   return loginData.value.username.trim() === '' || loginData.value.password.trim() === '';
 });
 
-const signGoogle = async () => {
-  try {
-    const response = await loginService.signInWithGoogle();
-    console.log(response);
-  } catch (error) {
-    console.error('Failed to sign in with Google:', error);
-  }
-};
+// const signGoogle = async () => {
+//   try {
+//     const response = await loginService.signInWithGoogle();
+//     console.log(response);
+//   } catch (error) {
+//     console.error('Failed to sign in with Google:', error);
+//   }
+// };
 
 const goToLogin = () => {
   router.push('/register');

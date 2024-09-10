@@ -40,6 +40,10 @@
           </button>
         </div>
 
+        <div v-if="passwordError" class="text-red-500 text-sm">
+          {{ passwordError }}
+        </div>
+
         <button type="submit"
           class="w-full py-2 px-4 font-noto-sans-lao bg-red-600 rounded-lg text-white hover:bg-red-700 transition duration-200">
           ລົງທະບຽນ
@@ -85,25 +89,35 @@ const password = ref('')
 const confirmPassword = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+const passwordError = ref('')
 
 const handleSignUp = async () => {
   try {
+    passwordError.value = '' // Clear any existing error
+
+    if (password.value.length < 8) {
+      passwordError.value = 'ລະຫັດຜ່ານຕ້ອງ 8 ຕົວຂຶ້ນໄປ'
+      return;
+    }
+
+    if (password.value !== confirmPassword.value) {
+      passwordError.value = 'ລະຫັດຜ່ານບໍຕົງກັນ'
+      return;
+    }
+
     const body = {
       fullname: fullName.value,
       email: email.value,
       password: password.value,
-    }
-    if (password.value !== confirmPassword.value) {
-      alert('password not match')
-      return;
-    }
-    const reponse = await loginService.register(body)
-    console.log(reponse)
-    router.push('/login')
+    };
+
+    const response = await loginService.register(body);
+    console.log(response);
+    router.push('/login');
   } catch (error) {
     console.error('Failed to sign up:', error);
   }
-}
+};
 
 const signGoogle = async () => {
   try {
