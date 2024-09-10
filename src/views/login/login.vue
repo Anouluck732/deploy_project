@@ -73,18 +73,18 @@ const togglePassword = () => {
 
 const sendLogin = async () => {
   try {
-    const response = await loginService.login(loginData.value.username, loginData.value.password);
-    const data = response.data;
+    const { username, password } = loginData.value;
+    const { data, status } = await loginService.login(username, password);
 
-    if (response.status === 200 && data.token && data.refreshToken) {
-      // Store the tokens in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('refreshToken', data.refreshToken);
+    console.log('Login response:', data); // Keep this for debugging
+
+    if (status === 200 && data.message === 'Login successful' && data.user) {
+      // Store user information
       localStorage.setItem('user', JSON.stringify(data.user));
 
       if (stayLoggedIn.value) {
-        localStorage.setItem('username', loginData.value.username);
-        localStorage.setItem('password', loginData.value.password);
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
       } else {
         localStorage.removeItem('username');
         localStorage.removeItem('password');
@@ -92,10 +92,11 @@ const sendLogin = async () => {
 
       router.push('/product');
     } else {
-      console.error('Login failed: ', response.statusText);
+      throw new Error('Invalid response from server');
     }
   } catch (error) {
-    console.error('Login failed:', error);
+    console.error('Login failed:', error.message);
+    // Here you might want to set an error state or display a message to the user
   }
 };
 
@@ -103,14 +104,14 @@ const isButtonDisabled = computed(() => {
   return loginData.value.username.trim() === '' || loginData.value.password.trim() === '';
 });
 
-// const signGoogle = async () => {
-//   try {
-//     const response = await loginService.signInWithGoogle();
-//     console.log(response);
-//   } catch (error) {
-//     console.error('Failed to sign in with Google:', error);
-//   }
-// };
+const signGoogle = async () => {
+  try {
+    const response = await loginService.signInWithGoogle();
+    console.log(response);
+  } catch (error) {
+    console.error('Failed to sign in with Google:', error);
+  }
+};
 
 const goToLogin = () => {
   router.push('/register');

@@ -9,7 +9,7 @@
             type="text"
             id="address"
             v-model="formData.shippingAddress"
-            class="mt-1 block w-full  rounded-md border-gray-800 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            class="mt-1 block w-full rounded-md border-gray-800 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             required
           />
         </div>
@@ -46,14 +46,17 @@ import { useCartStore } from '@/stores/cart.store';
 import apiOrder from '@/services/order.service';
 import { useRouter } from 'vue-router';
 
+// Setup router and cart store
 const router = useRouter();
 const cartStore = useCartStore();
 
+// Reactive state
 const formData = ref({
-  fullname: '',
   shippingAddress: ''
 });
 const isSubmitting = ref(false);
+
+// Retrieve userId from localStorage
 const user = JSON.parse(localStorage.getItem('user'));
 const userId = user ? user.id : null;
 
@@ -62,17 +65,23 @@ const orderDetails = computed(() => ({
 }));
 
 const totalItems = computed(() => {
-  return orderDetails.value.products.reduce((sum, product) => {
-    return sum + (product.qty || 0);
-  }, 0);
+  return orderDetails.value.products.reduce((sum, product) => sum + (product.qty || 0), 0);
 });
 
 const totalAmount = computed(() => cartStore.totalAmount);
 
+// Handle form submission
 const handleSubmit = async () => {
   isSubmitting.value = true;
 
+  if (!userId) {
+    alert('User is not authenticated. Please log in.');
+    isSubmitting.value = false;
+    return;
+  }
+
   const orderData = {
+    userId: userId, // Ensure this matches the expected format
     order_date: new Date().toISOString(),
     total_price: totalAmount.value,
     order_status: 'pending',
@@ -81,14 +90,12 @@ const handleSubmit = async () => {
       pid: p.pid,
       quantity: p.qty,
       price: p.price
-    })),
-    id: userId
+    }))
   };
 
   try {
     await apiOrder.createOrder(orderData);
     alert('Order placed successfully!');
-    // Clear the cart after successful order placement
     cartStore.clearCart();
     router.push('/product');
   } catch (error) {
